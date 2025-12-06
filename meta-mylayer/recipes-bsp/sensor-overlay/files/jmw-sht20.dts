@@ -11,7 +11,7 @@
 			status = "okay";
 
 			// SHT20 define
-			sht20: sht20 {
+			sht20: sht20@40 {
 				compatible = "jmw,sht20"; // device name
 
 				reg = <0x40>; // i2c device address

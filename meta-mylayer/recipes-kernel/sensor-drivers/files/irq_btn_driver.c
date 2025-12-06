@@ -11,7 +11,7 @@
 #include <linux/wait.h>
 #include <linux/sched.h>
 
-#define BTN 538
+#define BTN 26 
 #define IRQ_NAME "button irq"
 #define DEVICE_NAME "button_device"
 #define DRIVER_NAME "button_driver"
