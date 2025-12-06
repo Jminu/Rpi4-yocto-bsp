@@ -136,7 +136,7 @@ static const struct file_operations fops = {
 };
 
 
-static int sht20_probe(struct i2c_client *client) {
+static int sht20_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct sht20_device *sht20;
 	int ret;
 
@@ -178,7 +178,7 @@ static int sht20_probe(struct i2c_client *client) {
 	return 0;
 }
 
-static void sht20_remove(struct i2c_client *client) {
+static int sht20_remove(struct i2c_client *client) {
 	struct sht20_device *sht20 = i2c_get_clientdata(client);
 
 	device_destroy(sht20->class, sht20->dev_num);
@@ -186,7 +186,7 @@ static void sht20_remove(struct i2c_client *client) {
 	cdev_del(&(sht20->sht20_cdev));
 	unregister_chrdev_region(sht20->dev_num, 1);
 
-	return;
+	return 0;
 }
 
 static struct i2c_driver sht20_driver = {

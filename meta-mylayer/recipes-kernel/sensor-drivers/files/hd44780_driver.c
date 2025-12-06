@@ -224,7 +224,7 @@ static const struct file_operations fops = {
 };
 
 
-static int hd44780_probe(struct i2c_client *client) {
+static int hd44780_probe(struct i2c_client *client, const struct i2c_device_id *id) {
 	struct hd44780_device *hd44780;
 	int ret;
 
@@ -261,7 +261,7 @@ static int hd44780_probe(struct i2c_client *client) {
 	return 0;
 }
 
-static void hd44780_remove(struct i2c_client *client) {
+static int  hd44780_remove(struct i2c_client *client) {
 	struct hd44780_device *hd44780 = i2c_get_clientdata(client);
 	
 	device_destroy(hd44780->class, hd44780->dev_num);
@@ -270,7 +270,7 @@ static void hd44780_remove(struct i2c_client *client) {
 	unregister_chrdev_region(hd44780->dev_num, 1);
 
 	printk(KERN_INFO "remove success\n");
-	return;
+	return 0;
 }
 
 static struct i2c_driver hd44780_driver = {
