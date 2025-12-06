@@ -15,23 +15,23 @@ inherit deploy
 # WORKDIR: build process temp directory
 # S: downloaded source code path
 S = "${WORKDIR}"
+B = "${S}"
 
 do_compile() {
-    dtc -@ -I dts -O dtb -o jmw-hd44780.dtbo ${S}/jmw-hd44780.dts
-    dtc -@ -I dts -O dtb -o jmw-sht20.dtbo ${S}/jmw-sht20.dts
+        dtc -@ -I dts -O dtb -o jmw-hd44780.dtbo ${S}/jmw-hd44780.dts
+        dtc -@ -I dts -O dtb -o jmw-sht20.dtbo ${S}/jmw-sht20.dts
 }
 
-#do_install() {
-#    install -d ${D}/boot/overlays
-#    install -m 0644 jmw-hd44780.dtbo ${D}/boot/overlays/
-#    install -m 0644 jmw-sht20.dtbo ${D}/boot/overlays/
-#}
-
+do_install() {
+    install -d ${D}/boot/overlays
+    install -m 0644 ${B}/jmw-hd44780.dtbo ${D}/boot/overlays/
+    install -m 0644 ${B}/jmw-sht20.dtbo ${D}/boot/overlays/
+}
 
 do_deploy() {
-        install -d ${DEPLOYDIR}/bcm2711-bootfiles
-        install -m 0644 ${B}/jmw-hd44780.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/
-        install -m 0644 ${B}/jmw-sht20.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/
+        install -d ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
+        install -m 0644 ${B}/jmw-hd44780.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
+        install -m 0644 ${B}/jmw-sht20.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
 }
 
 addtask deploy before do_build after do_compile
