@@ -22,16 +22,18 @@ do_compile() {
         dtc -@ -I dts -O dtb -o jmw-sht20.dtbo ${S}/jmw-sht20.dts
 }
 
+# D: filesystem
 do_install() {
     install -d ${D}/boot/overlays
     install -m 0644 ${B}/jmw-hd44780.dtbo ${D}/boot/overlays/
     install -m 0644 ${B}/jmw-sht20.dtbo ${D}/boot/overlays/
 }
 
+# DEPLOYDIR: materials for result Image
 do_deploy() {
-        install -d ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
-        install -m 0644 ${B}/jmw-hd44780.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
-        install -m 0644 ${B}/jmw-sht20.dtbo ${DEPLOYDIR}/bcm2711-bootfiles/overlays/
+        install -d ${DEPLOYDIR}
+        install -m 0644 ${B}/jmw-hd44780.dtbo ${DEPLOYDIR}/
+        install -m 0644 ${B}/jmw-sht20.dtbo ${DEPLOYDIR}/
 }
 
 addtask deploy before do_build after do_compile
