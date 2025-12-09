@@ -4,6 +4,11 @@ poky/
 meta-raspberrypid/
 meta-openembedded/
 
+build/
+!build/conf/bblayers.conf
+!build/conf/local.conf
+!build/conf/templateconf.cfg
+
 .DS_Store
 *.swp
 
