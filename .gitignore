@@ -3,9 +3,7 @@ meta-raspberrypid/
 meta-openembedded/
 
 build/
-!build/conf/bblayers.conf
-!build/conf/local.conf
-!build/conf/templateconf.cfg
+!build/conf/
 
 .DS_Store
 *.swp
