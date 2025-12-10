@@ -181,7 +181,7 @@ static void lcd_init(struct i2c_client *client) {
 }
 
 static void lcd_print(struct i2c_client *client, const char *str, int len) {
-	printk(KERN_INFO "strlen: %d\n", len);
+	printk(KERN_INFO "hd44780_driver.c: recived string length: %d\n", len);
 
 	int i = 0;
 	for (i = 0; i < 16; i++) {
@@ -202,6 +202,11 @@ static ssize_t hd44780_write(struct file *file, const char __user *buf, size_t l
 
 	int ret;
 	ret = copy_from_user(kbuf, buf, len);
+	if (ret < 0) {
+		return -1;
+	}
+
+	kbuf[len] = '\0';
 
 	lcd_write_cmd(hd44780->client, LCD_CLEARDISPLAY);
 	lcd_print(hd44780->client, kbuf, strlen(kbuf));

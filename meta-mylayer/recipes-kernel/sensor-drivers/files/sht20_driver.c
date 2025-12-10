@@ -92,7 +92,7 @@ static ssize_t sht20_read(struct file *file, char __user *buf, size_t len, loff_
 	int humid_raw;
 	char kbuf[64];
 
-	printk(KERN_INFO "sht20 read\n");
+	printk(KERN_INFO "sht20_driver.c: sht20 read\n");
 
 	if (*pos > 0) {
 		printk(KERN_ERR "pos err\n");
@@ -114,7 +114,7 @@ static ssize_t sht20_read(struct file *file, char __user *buf, size_t len, loff_
 	}
 
 	len = snprintf(kbuf, sizeof(kbuf), "%d|%d", temp_raw, humid_raw);
-	printk(KERN_INFO "%s\n", kbuf);
+	// printk(KERN_INFO "%s\n", kbuf);
 
 	copy_to_user(buf, kbuf, len);
 
