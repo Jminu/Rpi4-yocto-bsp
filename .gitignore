@@ -1,10 +1,10 @@
-poky/
-meta-raspberrypid/
-meta-openembedded/
+#poky/
+#meta-raspberrypid/
+#meta-openembedded/
 
 build/
 !build/conf/
 
-.DS_Store
+#.DS_Store
 *.swp
 
