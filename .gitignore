@@ -1,9 +1,8 @@
-#poky/
-#meta-raspberrypid/
-#meta-openembedded/
-
-build/
-!build/conf/
+build/bitbake-cookerdaemon.log
+build/cache
+build/downloads
+build/sstate-cache
+build/tmp
 
 #.DS_Store
 *.swp
