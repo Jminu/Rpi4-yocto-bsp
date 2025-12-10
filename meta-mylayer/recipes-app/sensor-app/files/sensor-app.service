@@ -1,0 +1,15 @@
+[Unit]
+Description=JMW Sensor Monitoring App
+After=systemd-modules-load.service multi-user.target
+Requires=systemd-modules-load.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/sensor-app
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+Wanted=multi-user.target
