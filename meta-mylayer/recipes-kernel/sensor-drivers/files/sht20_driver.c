@@ -10,6 +10,7 @@
 #include <linux/device.h>
 #include <linux/uaccess.h>
 #include <linux/delay.h>
+#include <linux/mutex.h>
 
 #define DRIVER_NAME "sht20_driver"
 #define DEVICE_COUNT 1
@@ -27,6 +28,7 @@ static struct sht20_device {
 	dev_t dev_num;
 	struct cdev sht20_cdev;
 	struct class *class;
+	struct mutex lock;
 	int temp;
 	int humid;
 };
@@ -99,19 +101,25 @@ static ssize_t sht20_read(struct file *file, char __user *buf, size_t len, loff_
 		return -1;
 	}
 
+	mutex_lock(&sht20->lock);
+
 	int ret;
 
 	ret = sht20_read_data(sht20->client, TEMP_MEASUREMENT, &temp_raw); // 0x40 chip address를 대상으로 온도 측정 명령
 	if (ret < 0) {
 		printk(KERN_ERR "Temp measurement fail\n");
+		mutex_unlock(&sht20->lock);
 		return -1;
 	}
 
 	ret = sht20_read_data(sht20->client, HUMID_MEASUREMENT, &humid_raw); // 0x40 chip address를 대상으로 습고 측정 명령
 	if (ret < 0) {
 		printk(KERN_ERR "Humid measurement fail\n");
+		mutex_unlock(&sht20->lock);
 		return -1;
 	}
+
+	mutex_unlock(&sht20->lock);
 
 	len = snprintf(kbuf, sizeof(kbuf), "%d|%d", temp_raw, humid_raw);
 	// printk(KERN_INFO "%s\n", kbuf);
@@ -175,11 +183,15 @@ static int sht20_probe(struct i2c_client *client, const struct i2c_device_id *id
 	sht20->class = class_create(THIS_MODULE, CLASS_NAME);
 	device_create(sht20->class, NULL, sht20->dev_num, NULL, DEVICE_NAME);
 
+	mutex_init(&sht20->lock);
+
 	return 0;
 }
 
 static int sht20_remove(struct i2c_client *client) {
 	struct sht20_device *sht20 = i2c_get_clientdata(client);
+
+	mutex_destroy(&sht20->lock);
 
 	device_destroy(sht20->class, sht20->dev_num);
 	class_destroy(sht20->class);
